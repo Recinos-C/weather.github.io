@@ -1,3 +1,6 @@
+window.onload = function (){
+    console.log("hello world I exist")
+
 var weatherInfo = {};
 savedInput = [];
 
@@ -23,35 +26,33 @@ function pushData() {
 $("button").on("click", function (event) {
 
     event.preventDefault();
-    var cityID = $("city-search").val().trim();
+    var cityID = $("#city-search").val().trim();
     console.log(cityID);
 
     $("#cities").append("<a class='btn btn-primary'>City</a>");
     $("a").last().text(cityID);
 
     // var weather = $(this).attr("data-weather");
-    var queryURL = "http://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&APPID=677f3bd14a8cd0b98400e32c5b25a2cc";
+    var queryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + cityID + "&APPID=677f3bd14a8cd0b98400e32c5b25a2cc";
 
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function (response) {
-        console.log(response);
+    }).then(function (response) {    
         var weatherDiv = $("#forecast")
-        var temp = response.Temperature;
-        var humid = response.Humidity;
-        var wind = response.Windspeed;
-        var uvIndex = respons.Uvindex;
-
+        var temp = Math.floor(((response.list[0].main.temp - 273.15)*1.8)+32) + "°";
+        var humid = response.list[0].main.humidity;
+        var wind = response.list[0].wind.speed; 
+        var uvIndex = response.list[0].main.temp_kf;
         var card = $("<div class='card-body'>");
         var day = $("<p class='card-text'>");
 
-        $("#city").text("Wind Speed:" + cityID);
-        $("#temp").text("Wind Speed:" + temp);
-        $("#humidity").text("Wind Speed:" + humid);
-        $("#wind").text("Wind Speed:" + wind);
-        $("#uv").text("Wind Speed:" + uvIndex);
-
+        $("#city").text("City: " + cityID);
+        $("#temp").text("Temperature: " + temp);
+        $("#humidity").text("Humidity: " + humid);
+        $("#wind").text("Wind Speed: " + wind);
+        $("#uv").text("UV Index: " + uvIndex);
+        pushData();
         for (var i = 0; i < 6; i++) {
             weatherDiv.append(card);
             card.append(day);
@@ -59,7 +60,8 @@ $("button").on("click", function (event) {
             card.append(day);
             card.last().text(humid);
         }
-        pushData();
+
     })
 
 });
+}
