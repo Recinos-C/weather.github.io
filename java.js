@@ -24,7 +24,7 @@ window.onload = function () {
 
 
     $("button").on("click", function (event) {
-
+        $("#forecast").empty()
         event.preventDefault();
         var cityID = $("#city-search").val().trim();
         console.log(cityID);
@@ -45,11 +45,8 @@ window.onload = function () {
             var humid = response.list[0].main.humidity;
             var wind = response.list[0].wind.speed;
             var uvIndex = response.list[0].main.temp_kf;
-            var card = $("<div class='card-body'>");
-            var day = $("<p class='card-text'>");
 
             // Append items for weather forcast
-
             $("#city").text("City: " + cityID);
             $("#temp").text("Temperature: " + temp);
             $("#humidity").text("Humidity: " + humid);
@@ -57,14 +54,30 @@ window.onload = function () {
             $("#uv").text("UV Index: " + uvIndex);
 
 
-            // Appends five day forcast
-
+            // Appends five day forcast   
             for (var i = 0; i < 6; i++) {
-                weatherDiv.append(card);
-                card.append(day);
-                day.text(temp);
-                card.append(day);
-                card.last().text(humid);
+                var main = $("<div class='card text-white bg-primary mb-3' style='max-width: 18rem;'>")
+                var header = $("<div class='card-header'>");
+                var card = $("<div class='card-body'>");
+                var title = $("<h5 class='card-title'>");
+                var day = $("<p class='card-text'>");
+                var list = $("<ul>");
+                var li1 = $("<li>")
+                var li2 = $("<li>")
+                var li3 = $("<li>")
+                var li4 = $("<li>")
+                
+                
+
+                weatherDiv.append(main.append(header,card).append(title,day,list.append(li1,li2,li3, li4)));
+               header.text(response.list[i].dt_txt);
+               title.text("Todays Forcast")
+               li1.text("Humidity: " + humid)
+               li2.text("Wind speed: "+ wind)
+               li3.text("Temperature: " + temp)
+               li4.text("UV Index" + uvIndex)
+
+
 
                 var temp = Math.floor(((response.list[i].main.temp - 273.15) * 1.8) + 32) + "°";
                 var humid = response.list[i].main.humidity;
